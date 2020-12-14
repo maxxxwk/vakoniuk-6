@@ -2,6 +2,9 @@ package com.maxxxwk.familytree
 
 import com.google.gson.Gson
 import com.google.gson.annotations.SerializedName
+import java.io.File
+import java.lang.StringBuilder
+import java.util.*
 
 
 data class Person(
@@ -18,60 +21,19 @@ data class Person(
     @SerializedName("isAdult")
     val isAdult: Boolean
 )
+fun getJSONFromFile(): String{
+    val file = File("file.json")
+    val scanner = Scanner(file)
+    var json = StringBuilder()
+    while (scanner.hasNext()){
+        json.append(scanner.nextLine())
+    }
+    scanner.close()
+    return json.toString()
+}
 fun main() {
     val gson = Gson()
-    val json = """
-        {
-            "name" : "Maksym",
-            "age" : 18,
-            "mother" : {
-                    "name" : "Tetiana",
-                    "age" : 50,
-                    "mother" : {
-                            "name" : "Maria",
-                            "age" : 72,
-                            "mother" : null,
-                            "father" : null,
-                            "numberOfRelatives" : 5,
-                            "isAdult" : true
-                        },
-                    "father" : {
-                            "name" : "Ivan",
-                            "age" : 72,
-                            "mother" : null,
-                            "father" : null,
-                            "numberOfRelatives" : 5,
-                            "isAdult" : true
-                        },
-                    "numberOfRelatives" : 6,
-                    "isAdult" : true
-                },
-            "father" : {
-                    "name" : "Anatoliy",
-                    "age" : 55,
-                    "mother" : {
-                            "name" : "Nadia",
-                            "age" : 75,
-                            "mother" : null,
-                            "father" : null,
-                            "numberOfRelatives" : 3,
-                            "isAdult" : true
-                        },
-                    "father" : {
-                            "name" : "Dmytro",
-                            "age" : 78,
-                            "mother" : null,
-                            "father" : null,
-                            "numberOfRelatives" : 3,
-                            "isAdult" : true
-                        },
-                    "numberOfRelatives" : 2,
-                    "isAdult" : true
-                },
-            "numberOfRelatives" : 9,
-            "isAdult" : true
-        }
-    """
+    val json = getJSONFromFile()
     val person = gson.fromJson(json, Person::class.java)
     println(person)
     println(gson.toJson(person))
